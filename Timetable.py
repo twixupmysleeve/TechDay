@@ -14,7 +14,7 @@ class Timetable:
                        'Status': event.fixed}
         self.events.append(event)
         self.timetable = self.timetable.append(event_entry, ignore_index=True)
-        
+
     def add_event_list(self, event_list):
         for event in event_list:
             self.add_event(event)

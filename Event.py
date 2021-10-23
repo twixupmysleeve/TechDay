@@ -20,4 +20,3 @@ class Event:
         self.fixed = fixed
 
 #math1552 = Event("Math 1552", "Skiles", 50, [(1100, 1150)], fixed=True)
-
