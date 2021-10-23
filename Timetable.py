@@ -2,9 +2,12 @@ import datetime
 import pandas as pd
 import numpy as np
 from Event import Event
+from GoogleMaps import calculate_time_matrix
+from collections import defaultdict
 
 
 class Timetable:
+
     def __init__(self):
         self.clear_timetable()
 
@@ -13,7 +16,7 @@ class Timetable:
                        'Start Time': event.start_time, 'End Time': event.end_time,
                        'Status': event.fixed}
         self.events.append(event)
-        self.timetable = self.timetable.append(event_entry, ignore_index=True)
+        # self.timetable = self.timetable.append(event_entry, ignore_index=True)
 
     def add_event_list(self, event_list):
         for event in event_list:
@@ -25,76 +28,74 @@ class Timetable:
     def clear_timetable(self):
         self.timetable = pd.DataFrame(columns = ['Name', 'Location', 'Duration', 'Start Time', 'End Time', 'Status'])
         self.events = []
+        self.location_matrix = defaultdict(dict)
 
-# TODO: Convert all the below functions into OOP
-def main_run():
-    user_input_condition()
+    def create_location_matrix(self):
+        locations = [event.location for event in self.events]
+        self.location_matrix = calculate_time_matrix(locations)
 
-def event_definer():
-    try:
-        name = input("Enter Name of Event: ")
-        location = input("Enter Location of Event: ")
-        duration = int(input("Enter Duration of Event, in minutes: "))
-        #while True:
-        start_time = input("Enter Start Time of Event: ")
-        start_time_final = start_time[0] + start_time[1] + ":" + start_time[2] + start_time[3]
-        end_time = input("Enter End Time of Event: ")
-        end_time_final = end_time[0] + end_time[1] + ":" + end_time[2] + end_time[3]
-        status_temp = input("Is the event Fixed? Yes or No: ")
-        status_final = False
-        if status_temp == 'Yes':
-            status_final = True
+    def compute_travel_time(self, event1, event2):
+        travel_time = self.location_matrix[event1.location][event2.location]
+        return travel_time
 
-        return Event(name, location, duration, start_time_final, end_time_final, status_final)
-    except Exception as error:
-        # print(error)
-        print('Please provide correct input!')
-        event_definer()
+    def create_timetable(self):
+        schedule = []
+        base = datetime.datetime.strptime('1900-01-01 0000', '%Y-%m-%d %H%M')
+        dates_used_dict = {}
+        for x in range(1440):
+            dates_used_dict[base + datetime.timedelta(minutes=x)]=False
+            # if True means date has been used, if False means date hasn't been used
 
-test = Event("Vasav", "Skiles", 50, '1100', '1150', fixed=True)
+        earliest = datetime.datetime.strptime('0800', '%H%M')
+        latest = datetime.datetime.strptime('2359', '%H%M')
 
-def user_input_condition():
-    # TODO: These conditions should be in the Event class
-    # input_data = event_definer()
-    input_data = test
-    date_time_start = input_data.start_time
-    time_start_obj = datetime.datetime.strptime(date_time_start, '%H%M')
-    date_time_end = input_data.end_time
-    time_end_obj = datetime.datetime.strptime(date_time_end, '%H%M')
-    duration_in_min = (time_end_obj-time_start_obj).seconds/60
-    if duration_in_min < input_data.duration:
-        print('Duration of event is greater than timeframe provided!')
-        #event_definer()
+        for event in self.events:
+            if event.fixed:
+                for start, end in event.timeframe:
+                    # Convert start and end times to datetime objects
+                    val = datetime.datetime.strptime(start, '%H%M')
+                    # print(dates_used_dict)
 
-def timetable_dataframe():
-    # def timetable_dataframe(timetable):
-    timetable = pd.DataFrame(columns = ['Name', 'Location', 'Duration', 'Start Time', 'End Time', 'Status'])
-    while True:
-        # TODO: We don't need this because we're going to be using
-        #  some UI later which will use buttons to handle this
-        user_input_status = input("Add another event? Yes or No: ")
-        if user_input_status == 'Yes':
-            event_values = event_definer()
-            event_entry = {'Name':event_values.name, 'Location':event_values.location , 'Duration':event_values.duration, 'Start Time':event_values.start_time, 'End Time':event_values.end_time, 'Status':event_values.fixed}
-            timetable = timetable.append(event_entry, ignore_index = True)
-        else:
-            return timetable
+                    event.start_time = start
+                    event.end_time = end
 
-# main_run()
+                    for _ in range(event.duration+1):
+                        if dates_used_dict[val]:
+                            raise ValueError(val)
+                        dates_used_dict[val] = True
+                        val += datetime.timedelta(minutes=1)
+                    
+                    schedule.append(event)
+
+        self.events.sort(key = lambda x: (x.priority, x.duration))
+
+        
+
+
+        schedule.sort(key=lambda x: (x.start_time))
+        # print([(event.name, event.start_time, event.end_time) for event in self.events])
+        return ([(i.name, i.start_time, i.end_time) for i in schedule])
+
+def compare_datetime(a, b):
+    return (a.minutes == b.minutes and a.hours == b.hours)
 
 if __name__ == '__main__':
     timetable = Timetable()
-    math1552 = Event("Math 1552", "Skiles", 50, "1100", "1150", fixed=True)
-    gym = Event("Gym", "CRC", 90, "0900", "2000", fixed=False)
-    inta1200 = Event("INTA 1200", "Instructional Center", 50, "1400", "1450", fixed=True)
-    eveningSnack = Event("Evening snack", "Willage", 30, "1600", "1800", fixed=False)
 
-    timetable.add_event(math1552)
-    timetable.add_event(gym)
-    timetable.add_event(inta1200)
-    timetable.add_event(eveningSnack)
+    cs1331 = Event("CS1331", "Klaus", 50, [("0825", "0915")], fixed=True)
+    inta1200 = Event("INTA 1200", "Instructional Center", 50, [("1400", "1450")], fixed=True)
+    math1552 = Event("Math 1552", "Skiles", 50, [("1100", "1150")], fixed=True)
+    engl1102 = Event("ENGL 1102", "Skiles", 75, [("1700", "1815")], fixed=True)
+    gym = Event("Gym", "CRC", 90, [("0900", "2000")], fixed=False)
+    evening_snack = Event("Evening snack", "Willage", 30, [("1400", "1800")], fixed=False)
+    afternoon_meal = Event("Afternoon Meal", "Brittain", 30, [("1200", "1400")], fixed=False)
+    studying = Event("Studyin", "LLL", 30, [("0800", "2000")], fixed=False)
 
-    print(timetable.timetable)
+    event_list = [math1552, gym, inta1200, cs1331, evening_snack, afternoon_meal, studying, engl1102]
+
+    timetable.add_event_list(event_list)
+
+    print(timetable.create_timetable())
 
 """if user_input_condition():
     break

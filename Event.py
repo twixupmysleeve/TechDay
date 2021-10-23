@@ -4,7 +4,7 @@ import numpy as np
 
 
 class Event:
-    def __init__(self, name: str, location: str, duration: int, start_time: str, end_time: str, fixed=False):
+    def __init__(self, name: str, location: str, duration: int, timeframe: tuple, priority=1, fixed=False):
         """
         Event class
         :param name: name of Event
@@ -15,9 +15,14 @@ class Event:
         """
         self.name = name
         self.location = location
-        self.start_time = start_time
-        self.end_time = end_time
+        self.timeframe = timeframe
         self.duration = duration
         self.fixed = fixed
+        self.priority = priority
+
+        self.start_time = self.timeframe[0][0]
+        self.end_time = self.timeframe[0][1]
+
+
 
 # math1552 = Event("Math 1552", "Skiles", 50, [(1100, 1150)], fixed=True)

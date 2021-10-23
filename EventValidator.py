@@ -178,7 +178,8 @@ def several_duration_end():
         #figure:several_timeframes_duration()
 
 
-def event_validator(name, location, duration, start_time, end_time):
+def event_validator(event):
+    duration, start_time, end_time = event.duration, event.start_time, event.end_time
 
     start_time_final = start_time[0] + start_time[1] + start_time[2] + start_time[3]
     time_start_obj = datetime.datetime.strptime(start_time_final, '%H%M')
@@ -193,6 +194,7 @@ def event_validator(name, location, duration, start_time, end_time):
         list_event_duration_timeframe = [start_time, end_time, duration]
         return list_event_duration_timeframe
 
-event_validator('hi', 'yo', 30,'1240', '1300')
+event = Event('hi', 'yo', 30,'1240', '1300')
+event_validator(event)
 event_start_and_duration()
 event_timeframe()

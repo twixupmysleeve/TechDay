@@ -26,24 +26,9 @@ def make_url(origins, destinations):
     return URL
 
 
-def calculate_time_matrix():
-    origins = ["Harrison Residence Hall Georgia Tech", "Howey Physics Georgia Tech", "Skiles Building",
-               "CRC Georgia Tech", "Skiles Building", "College of Computing Georgia Tech",
-               "Instructional Center Georgia Tech", "North Avenue Dining Hall"]
+def calculate_time_matrix(locations):
+    origins = locations
     destinations = origins
-    '''
-    origins = []
-    o = int(input("Please enter #starting locations"))
-    for i in range(o):
-        location = input("Enter location:")
-        origins.append(location)
-        
-    destinations = []
-    d = int(input("Please enter #destination locations"))
-    for i in range(d):
-        location = input("Enter location:")
-        destinations.append(location)
-    '''
 
     search_url = make_url(origins, destinations)
     print(search_url)
@@ -64,4 +49,7 @@ def calculate_time_matrix():
 
 
 if __name__ == "__main__":
-    pprint(calculate_time_matrix())
+    locations = ["Harrison Residence Hall Georgia Tech", "Howey Physics Georgia Tech", "Skiles Building",
+               "CRC Georgia Tech", "Skiles Building", "College of Computing Georgia Tech",
+               "Instructional Center Georgia Tech", "North Avenue Dining Hall"]
+    pprint(calculate_time_matrix(locations))
