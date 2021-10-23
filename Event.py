@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class Event:
-    def __init__(self, name: str, location: str, duration: int, start_time: int, end_time: int, fixed=False):
+    def __init__(self, name: str, location: str, duration: int, start_time: str, end_time: str, fixed=False):
         """
         Event class
         :param name: name of Event
