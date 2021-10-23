@@ -4,6 +4,7 @@ import datetime
 from Timetable import Timetable
 from Event import Event
 from Rearrange import optimize
+from datetime import timedelta
 
 def event_name():
     try:
@@ -58,10 +59,35 @@ def event_timeframe():
     try:
         start_time = event_start_time()
         end_time = event_end_time()
-        list_timeframe = [()]
+        duration_in_min = (end_time-start_time).seconds/60
+        list_timeframe = [(start_time, end_time), duration_in_min]
+        return list_timeframe
     except:
         print('Error! Try Again')
-        event_duration_x_timeframe()
+        event_duration_timeframe()
+
+def event_start_and_duration():
+    try:
+        start_time = event_start_time()
+        duration = event_duration()
+        end_time = start_time + timedelta(minutes=duration)
+        list_timeframe = [(start_time, end_time), duration]
+        return list_timeframe
+    except Exception as error:
+        print(error)
+        print('Error! Try Again')
+        event_start_and_duration()
+
+def event_end_and_duration():
+    try:
+        end_time = event_end_time()
+        duration = event_duration()
+        start_time = end_time - timedelta(minutes=duration)
+        list_timeframe = [(start_time, end_time), duration_in_min]
+        return list_timeframe
+    except:
+        print('Error! Try Again')
+        event_end_and_duration()
 
 def event_duration_x_timeframe():
     try:
@@ -79,10 +105,6 @@ def event_duration_x_timeframe():
         print('Error! Try Again')
         event_duration_x_timeframe()
 
-
-
-
-#check function below 8----D
 def event_validator(name, location, duration, start_time, end_time):
 
     start_time_final = start_time[0] + start_time[1] + start_time[2] + start_time[3]
@@ -99,3 +121,5 @@ def event_validator(name, location, duration, start_time, end_time):
         return list_event_duration_timeframe
 
 event_validator('hi', 'yo', 30,'1240', '1300')
+event_start_and_duration()
+event_timeframe()
