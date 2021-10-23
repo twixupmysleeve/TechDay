@@ -2,6 +2,7 @@ import datetime as dt
 import pandas as pd
 import numpy as np
 
+
 class Event:
     def __init__(self, name: str, location: str, duration: int, start_time: str, end_time: str, fixed=False):
         """
@@ -19,4 +20,4 @@ class Event:
         self.duration = duration
         self.fixed = fixed
 
-#math1552 = Event("Math 1552", "Skiles", 50, [(1100, 1150)], fixed=True)
+# math1552 = Event("Math 1552", "Skiles", 50, [(1100, 1150)], fixed=True)
