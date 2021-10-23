@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 class Event:
-    def __init__(self, name: String, location: String, duration: int, timeframe: List, fixed=False):
+    def __init__(self, name: str, location: str, duration: int, start_time: int, end_time: int, fixed=False):
         """
         Event class
         :param name: name of Event
@@ -14,9 +14,9 @@ class Event:
         """
         self.name = name
         self.location = location
-        self.timeframe = timeframe
+        self.start_time = start_time
+        self.end_time = end_time
         self.duration = duration
         self.fixed = fixed
 
-math1552 = Event("Math 1552", "Skiles", 50, [(1100, 1150)], fixed=True)
-
+#math1552 = Event("Math 1552", "Skiles", 50, [(1100, 1150)], fixed=True)
