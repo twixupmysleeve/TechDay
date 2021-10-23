@@ -105,6 +105,79 @@ def event_duration_x_timeframe():
         print('Error! Try Again')
         event_duration_x_timeframe()
 
+def several_timeframes_x_duration():
+    try:
+        duration = event_duration_x_timeframe()[1]
+        TimeframeList = events_duration_x_timeframe()[0]
+        while True:
+            start_time = event_start_time()
+            end_time = event_end_time()
+            duration_in_min = (end_time - start_time).seconds / 60
+            if (duration_in_min < float(duration)):
+                print('Duration of event is greater than timeframe provided!')
+                event_timesframe()
+            else:
+                TimeframeList.append((start_time, end_time))
+        return TimeframeList
+    except:
+        print('Error! Try Again')
+        several_timeframes_duration()
+
+def several_timeframes():
+    try:
+        duration = event_timeframe()[1]
+        TimeframeList = events_timeframe()[0]
+        while True:
+            start_time = event_start_time()
+            end_time = event_end_time()
+            duration_in_min = (end_time - start_time).seconds / 60
+            if (duration_in_min < float(duration)):
+                print('Duration of event is greater than timeframe provided!')
+                event_timeframe()
+            else:
+                TimeframeList.append((start_time, end_time))
+        return TimeframeList
+    except:
+        print('Error! Try Again')
+        several_timeframes_duration()
+
+def several_duration_end():
+    try:
+        duration = event_end_and_duration()[1]
+        TimeframeList = events_end_and_duration()[0]
+        while True:
+            start_time = event_start_time()
+            end_time = event_end_time()
+            duration_in_min = (end_time - start_time).seconds / 60
+            if (duration_in_min < float(duration)):
+                print('Duration of event is greater than timeframe provided!')
+                event_timeframe()
+            else:
+                TimeframeList.append((start_time, end_time))
+        return TimeframeList
+    except:
+        print('Error! Try Again')
+        #figure:several_timeframes_duration()
+
+def several_duration_end():
+    try:
+        duration = event_start_and_duration()[1]
+        TimeframeList = events_start_and_duration()[0]
+        while True:
+            start_time = event_start_time()
+            end_time = event_end_time()
+            duration_in_min = (end_time - start_time).seconds / 60
+            if (duration_in_min < float(duration)):
+                print('Duration of event is greater than timeframe provided!')
+                event_timeframe()
+            else:
+                TimeframeList.append((start_time, end_time))
+        return TimeframeList
+    except:
+        print('Error! Try Again')
+        #figure:several_timeframes_duration()
+
+
 def event_validator(name, location, duration, start_time, end_time):
 
     start_time_final = start_time[0] + start_time[1] + start_time[2] + start_time[3]
