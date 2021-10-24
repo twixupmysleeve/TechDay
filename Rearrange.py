@@ -34,7 +34,7 @@ def optimize(events_list, location_matrix):
         # print([i.strftime("%H%M") for i in fixed_times])
         for start, end in event.timeframe:
             start = datetime.datetime.strptime(start, '%H%M')
-            end = datetime.datetime.strptime(start, '%H%M')
+            end = datetime.datetime.strptime(end, '%H%M')
             duration = datetime.timedelta(minutes=event.duration)
 
             if not event.fixed:
@@ -56,8 +56,8 @@ def optimize(events_list, location_matrix):
                     random_time = random_date(start, end, printing=True)
                     random_end = random_time + duration
                     print(event.name, random_time, random_end)
-                    print("FIXED:",  len(all_times))
-                    print("FIXED SET:", len(set(all_times)))
+                    # print("FIXED:",  len(all_times))
+                    # print("FIXED SET:", len(set(all_times)))
                 # break
 
                 event.start_time = random_time.strftime("%H%M")
@@ -66,7 +66,7 @@ def optimize(events_list, location_matrix):
                 step = datetime.timedelta(minutes=1)
                 val = start
                 while val <= end:
-                    all_times.append(val)
+                    fixed_times.append(val)
                     val += step
     # print([(i.name, i.start_time, i.end_time) for i in schedule])
     schedule.sort(key=lambda x:(x.start_time))
@@ -77,17 +77,7 @@ def optimize(events_list, location_matrix):
     # else:
     #     return optimize(events_list, location_matrix)
 
-def random_date(start, end, printing=False):
-    """
-    This function will return a random datetime between two datetime
-    objects.
-    """
-    delta = end - start
-    int_delta = (delta.seconds/60)
-    random_minute = random.randint(0,int_delta)
-    if printing:
-        print("RANDOM", random_minute)
-    return start + datetime.timedelta(minutes=random_minute)
+
 
 
 if __name__ == '__main__':

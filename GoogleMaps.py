@@ -33,18 +33,19 @@ def calculate_time_matrix(locations):
     search_url = make_url(origins, destinations)
     print(search_url)
     map_info = requests.get(search_url).json()["rows"]
-
+    # print(map_info)
     time_matrix = defaultdict(dict)
-
+    # print("Making time matrix")
     for i in range(len(origins)):
         for j in range(len(destinations)):
             # time_text = map_info[i]["elements"][j]["duration"][
             #     "text"]
+            # print(map_info)
             time_minutes = round(map_info[i]["elements"][j]["duration"]["value"] / 60, 2)
             time_matrix[origins[i]][destinations[j]] = time_minutes
             # print("Time between " + origins[i] + " and " + destinations[j] + " is: " + str(
             #     time_minutes) + " mins")
-
+    # print("Time matrix ready!")
     return time_matrix
 
 
