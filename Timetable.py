@@ -88,11 +88,12 @@ class Timetable:
         self.create_location_matrix(events)
         # perms = list(permutations(self.locations, len(self.locations)))
         print("Calculating permutations...")
-        perms = [p for p in product(self.locations, repeat=len(self.locations))]
+        perms = [p for p in product(self.locations, repeat=len(self.events))]
         print("Creating permutation mapping...")
         # print(perms)
         for idx in range(len(perms)):
             i = perms[idx]
+
             score = 0
             for jdx in range(len(i) - 1):
                 j = i[jdx]
